@@ -10,7 +10,7 @@ describe('CreateWork Unit Tests', () => {
         workRepository = {
             saveWork: jest.fn(),
             updateWork: jest.fn(),
-            getWork: jest.fn(),
+            getWorks: jest.fn(),
         } as jest.Mocked<WorkRepository>
 
         createWorkUseCase = new CreateWork(workRepository)

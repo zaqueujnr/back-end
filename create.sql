@@ -1,22 +1,22 @@
-drop table company;
-drop table professional;
+-- drop table company;
+-- drop table professional;
 drop table work;
 
-create table company (
-	company_id uuid primary key,
-	name text,
-	cnpj text,
-    email text,
-    endereco text
-);
+-- create table company (
+-- 	company_id uuid primary key,
+-- 	name text,
+-- 	cnpj text,
+--     email text,
+--     endereco text
+-- );
 
-create table professional (
-	professional_id uuid primary key,
-	name text,
-	email text,
-	position text,
-	salary numeric
-);
+-- create table professional (
+-- 	professional_id uuid primary key,
+-- 	name text,
+-- 	email text,
+-- 	position text,
+-- 	salary numeric
+-- );
 
 create table work (
 	description text,
@@ -27,5 +27,18 @@ create table work (
 );
 
 
--- insert into company (company_id, name, email) values ('aa354842-59bf-42e6-be3a-6188dbb5fff8', 'DIAMANTE', 'diamante@gmail.com');
--- insert into professional (professional_id, name, position) values ('d5f5c6cb-bf69-4743-a288-dafed2517e38', 'Zaqueu Junior', 'Caldereiro');
+insert into work (description, date_init, date_end, type_contract, time) values ('ACESSO A CORDA', NOW(), NOW(), 'Temporario', 'Integral');
+insert into work (description, date_init, date_end, type_contract, time) values ('CALDEREIRO', NOW(), NOW(), 'Temporario', 'Integral');
+insert into work (description, date_init, date_end, type_contract, time) values ('PINTOR', NOW(), NOW(), 'Temporario', 'Integral');
+insert into work (description, date_init, date_end, type_contract, time) values ('SERVICOS GERAIS', NOW(), NOW(), 'Temporario', 'Integral');
+insert into work (description, date_init, date_end, type_contract, time) values ('AUTOMACAO', NOW(), NOW(), 'Temporario', 'Integral');
+insert into work (description, date_init, date_end, type_contract, time) values ('ELETRECISTA', NOW(), NOW(), 'Temporario', 'Integral');
+insert into work (description, date_init, date_end, type_contract, time) values ('OPERADOR MAQUINA', NOW(), NOW(), 'Temporario', 'Integral');
+insert into work (description, date_init, date_end, type_contract, time) values ('SEGURANCA DO TRABALHO', NOW(), NOW(), 'Temporario', 'Integral');
+insert into work (description, date_init, date_end, type_contract, time) values ('PREPARADOR', NOW(), NOW(), 'Temporario', 'Integral');
+insert into work (description, date_init, date_end, type_contract, time) values ('MECANICO 1', NOW(), NOW(), 'Temporario', 'Integral');
+insert into work (description, date_init, date_end, type_contract, time) values ('MECANICO 2', NOW(), NOW(), 'Temporario', 'Integral');
+insert into work (description, date_init, date_end, type_contract, time) values ('ENGENHEIRO CIVIL', NOW(), NOW(), 'Temporario', 'Integral');
+insert into work (description, date_init, date_end, type_contract, time) values ('ENGENHEIRO MECANICO', NOW(), NOW(), 'Temporario', 'Integral');
+insert into work (description, date_init, date_end, type_contract, time) values ('INSPETOR DE SOLDA', NOW(), NOW(), 'Temporario', 'Integral');
+insert into work (description, date_init, date_end, type_contract, time) values ('INSPETOR DE SOLDA', NOW(), NOW(), 'Temporario', 'Integral');
