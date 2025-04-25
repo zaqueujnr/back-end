@@ -3,11 +3,13 @@ import CreateWork from "../application/CreateWork";
 import { WorkRepositoryDatabase } from "../infra/repository/WorkRepository";
 import GetWorks from "../application/GetWorks";
 import { pgPromiseConnection } from "../infra/database/DatabaseConnection";
+import { CompanyRepositoryDatabase } from "../infra/repository/CompanyRepository";
 
 const router = Router()
 const WorkRepository = new WorkRepositoryDatabase(pgPromiseConnection)
+const CompanyRepository = new CompanyRepositoryDatabase(pgPromiseConnection)
 const createWork = new CreateWork(WorkRepository)
-const getWorks = new GetWorks(WorkRepository)
+const getWorks = new GetWorks(WorkRepository, CompanyRepository)
 
 // Create work
 

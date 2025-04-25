@@ -6,14 +6,16 @@ export default class CreateCompany {
     constructor(readonly companyRepository: CompanyRepository) {
     }
 
-    async execute(input: Input) {
+    async execute(input: Input): Promise<string> {
         const existsCnpj = await this.companyRepository.existsByCNPJ(input.cnpj);
-        if (existsCnpj) {
-          throw new Error("CNPJ já está cadastrado");
-        }
+        const existsEmail = await this.companyRepository.existsByEmail(input.email);
+        if (existsCnpj) throw new Error("CNPJ já está cadastrado");
+        if (existsEmail) throw new Error("Email já está cadastrado");
+        
         const company = Company.create(input.name, input.cnpj, input.email, input.endereco)
 
         await this.companyRepository.saveCompany(company)
+        return company.id
     }
 }
 

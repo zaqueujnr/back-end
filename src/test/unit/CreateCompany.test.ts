@@ -2,7 +2,6 @@ import createCompany from "../../application/CreateCompany";
 import CompanyRepository from "../../infra/repository/CompanyRepository";
 import Email from "../../domain/Email";
 
-describe("CreateCompany Unit Tests", () => {
     let companyRepository: jest.Mocked<CompanyRepository>;
     let createCompanyUseCase: createCompany;
 
@@ -10,8 +9,9 @@ describe("CreateCompany Unit Tests", () => {
         companyRepository = {
             saveCompany: jest.fn(),
             updateCompany: jest.fn(),
-            getCompany: jest.fn(),
+            getCompanies: jest.fn(),
             existsByCNPJ: jest.fn().mockResolvedValue(false),
+            existsByEmail: jest.fn().mockResolvedValue(false),
         } as jest.Mocked<CompanyRepository>;
 
         createCompanyUseCase = new createCompany(companyRepository);
@@ -48,7 +48,8 @@ describe("CreateCompany Unit Tests", () => {
             endereco: "Rua Principal, 123"
         };
 
-        await expect(createCompanyUseCase.execute(input)).rejects.toThrow("CNPJ inválido")
+        await expect(createCompanyUseCase.execute(input)).rejects.toThrow("O CNPJ é inválido")
+        expect(companyRepository.saveCompany).not.toHaveBeenCalled()
     })
 
     it("deve lançar um erro ao salvar uma empresa com nome inválido", async () => {
@@ -60,6 +61,20 @@ describe("CreateCompany Unit Tests", () => {
         };
 
         await expect(createCompanyUseCase.execute(input)).rejects.toThrow("O nome é obrigatório")
+        expect(companyRepository.saveCompany).not.toHaveBeenCalled()
+
+    })
+
+    it("deve lançar erro ao salvar um email vazio", async () => {
+        const input = {
+            name: "Sul Service Eng",
+            cnpj: "12345678000100",
+            email: "",
+            endereco: "Rua Principal, 123"
+        };
+
+        await expect(createCompanyUseCase.execute(input)).rejects.toThrow("O email é obrigatório")
+        expect(companyRepository.saveCompany).not.toHaveBeenCalled()
 
     })
 
@@ -72,9 +87,27 @@ describe("CreateCompany Unit Tests", () => {
         };
 
         await expect(createCompanyUseCase.execute(input)).rejects.toThrow("O email é inválido")
+        expect(companyRepository.saveCompany).not.toHaveBeenCalled()
 
     })
 
+    it("deve lançar erro ao tentar salvar empresa com email duplicado", async () => {
+        companyRepository.existsByEmail.mockResolvedValue(true);
+
+        const input = {
+            name: "Sul Service Eng",
+            cnpj: "12345678000100",
+            email: "empresa@teste.com",
+            endereco: "teste"
+        }
+
+        await expect(createCompanyUseCase.execute(input)).rejects.toThrow("Email já está cadastrado")
+
+        expect(companyRepository.existsByEmail).toHaveBeenCalledWith(input.email)
+
+        expect(companyRepository.saveCompany).not.toHaveBeenCalled()
+    })
+    
     it("deve lançar erro ao salvar empresa com endereco vazio", async () => {
         const input = {
             name: "Sul Service Eng",
@@ -83,7 +116,8 @@ describe("CreateCompany Unit Tests", () => {
             endereco: ""
         }
 
-        await expect(createCompanyUseCase.execute(input)).rejects.toThrow("O endereco é obrigatório")
+        await expect(createCompanyUseCase.execute(input)).rejects.toThrow("O endereço é obrigatório")
+        expect(companyRepository.saveCompany).not.toHaveBeenCalled()
     })
 
     it("deve lançar erro ao tentar salvar empresa com cnpj duplicado", async () => {
@@ -103,6 +137,4 @@ describe("CreateCompany Unit Tests", () => {
         expect(companyRepository.saveCompany).not.toHaveBeenCalled()
     })
     
-});
-
 

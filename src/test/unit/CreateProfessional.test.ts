@@ -1,108 +1,157 @@
 import CreateProfessional from "../../application/CreateProfessional"
 import Email from "../../domain/Email"
+import Professional from "../../domain/Professional"
 import ProfessionalRepository from "../../infra/repository/ProfessionalRepository"
 
-describe('CreateProfessional Unit test', () =>{
-    let professionalRepository: jest.Mocked<ProfessionalRepository>
-    let createProfessionalUseCase: CreateProfessional
+let professionalRepository: ProfessionalRepository
+let createProfessionalUseCase: CreateProfessional
+let shouldEmailExist = false
+let wasCalledOnSave: any = undefined
+let wasCalledOnExists: any = undefined
 
-    beforeEach( () => {
-        professionalRepository = {
-            saveProfessional: jest.fn(),
-            updateProfessional: jest.fn(),
-            getProfessional: jest.fn(),
-        } as jest.Mocked<ProfessionalRepository>
+const resetFakeFlags = () => {
+    shouldEmailExist = false
+    wasCalledOnSave = undefined
+    wasCalledOnExists = undefined
+}
 
-        createProfessionalUseCase = new CreateProfessional(professionalRepository)
+beforeEach(() => {
+    resetFakeFlags()
+
+    professionalRepository = {
+        saveProfessional: async (professional: Professional): Promise<any> => {
+            wasCalledOnSave = professional
+        },
+        updateProfessional: async (): Promise<void> => { },
+        getProfessionals: async (): Promise<any> => { },
+        existsByEmail: async (email: string): Promise<boolean> => {
+            wasCalledOnExists = email
+            return shouldEmailExist
+        },
+    } as ProfessionalRepository
+
+    createProfessionalUseCase = new CreateProfessional(professionalRepository)
+})
+
+it("deve salvar um profissional com sucesso", async () => {
+    const input = {
+        name: 'Zaqueu Junior',
+        email: 'zaqueujunior1998@gmail.com',
+        position: 'programador',
+        salary: 9000.0,
+    }
+
+    await createProfessionalUseCase.execute(input)
+
+    expect(wasCalledOnSave).toMatchObject({
+        name: input.name,
+        email: new Email(input.email),
+        position: input.position,
+        salary: input.salary,
     })
+    expect(wasCalledOnSave.professionalId).toBeDefined()
+    expect(typeof wasCalledOnSave.professionalId).toBe('string')
 
-    
-    it("deve salvar um profissional com sucesso", async () => {
-        const input = {
-            professionalId: '8465986515',
-            name: 'Zaqueu Junior',
-            email: 'zaqueujunior1998@gmail.com',
-            position: 'programador',
-            salary: 90000,
-        }
+})
 
-        await createProfessionalUseCase.execute(input)
-        
-        expect(professionalRepository.saveProfessional).toHaveBeenCalledWith(
-            expect.objectContaining({
-                name: input.name,
-                professionalId: input.professionalId,
-                email: new Email(input.email),
-                position: input.position,
-                salary: input.salary,
-            })
-        )
+it("deve lançar um erro ao salvar um profissional com nome vazio", async () => {
 
-    })
+    const input = {
+        name: '',
+        email: 'zaqueujunior1998@gmail.com',
+        position: 'programador',
+        salary: 9000.0,
+    }
 
-    it("deve lançar um erro ao salvar um profissional com nome inválido", async () => {
-        
-        const input = {
-            professionalId: '8465986515',
-            name: '',
-            email: 'zaqueujunior1998@gmail.com',
-            position: 'programador',
-            salary: 90000,
-        }
+    await expect(createProfessionalUseCase.execute(input)).rejects.toThrow('O nome é obrigatório')
+    expect(wasCalledOnSave).toBeUndefined()
 
-        await expect(createProfessionalUseCase.execute(input)).rejects.toThrow('O nome é obrigatório')
-    })
+})
 
-    it("deve lançar um erro ao salvar um profissional com nome inválido", async () => {
-        
-        const input = {
-            professionalId: '8465986515',
-            name: '',
-            email: 'zaqueujunior1998@gmail.com',
-            position: 'programador',
-            salary: 90000,
-        }
+it("deve lançar um erro ao salvar um profissional com nome inválido", async () => {
 
-        await expect(createProfessionalUseCase.execute(input)).rejects.toThrow('O nome é obrigatório')
-    })
+    const input = {
+        name: '454jaus#',
+        email: 'zaqueujunior1998@gmail.com',
+        position: 'programador',
+        salary: 9000.0,
+    }
 
-    it("deve lançar um erro ao salvar um profissional com email inválido", async () => {
-        
-        const input = {
-            professionalId: '8465986515',
-            name: 'Zaqueu Junior',
-            email: 'zaqueujunior1998il.com',
-            position: 'programador',
-            salary: 90000,
-        }
+    await expect(createProfessionalUseCase.execute(input)).rejects.toThrow('O nome é inválido')
+    expect(wasCalledOnSave).toBeUndefined()
 
-        await expect(createProfessionalUseCase.execute(input)).rejects.toThrow('O email é inválido')
-    })
+})
 
-    it("deve lançar um erro ao salvar um profissional com ocupação vazia", async () => {
-        
-        const input = {
-            professionalId: '8465986515',
-            name: 'Zaqueu Junior',
-            email: 'zaqueujunior1998@gmail.com',
-            position: '',
-            salary: 90000,
-        }
+it("deve lançar um erro ao salvar um profissional com email vazio", async () => {
 
-        await expect(createProfessionalUseCase.execute(input)).rejects.toThrow('A ocupação é obrigatório')
-    })
+    const input = {
+        name: 'Zaqueu Junior',
+        email: '',
+        position: 'programador',
+        salary: 9000.0,
+    }
 
-    it("deve lançar um erro ao salvar um profissional com salario vazio", async () => {
-        
-        const input = {
-            professionalId: '8465986515',
-            name: 'Zaqueu Junior',
-            email: 'zaqueujunior1998@gmail.com',
-            position: 'programador',
-            salary: 0,
-        }
+    await expect(createProfessionalUseCase.execute(input)).rejects.toThrow('O email é obrigatório')
+    expect(wasCalledOnSave).toBeUndefined()
 
-        await expect(createProfessionalUseCase.execute(input)).rejects.toThrow('O salario é obrigatório')
-    })
+})
+
+it("deve lançar um erro ao salvar um profissional com email inválido", async () => {
+
+    const input = {
+        name: 'Zaqueu Junior',
+        email: 'joao@ email.com',
+        position: 'programador',
+        salary: 9000.0,
+    }
+
+    await expect(createProfessionalUseCase.execute(input)).rejects.toThrow('O email é inválido')
+    expect(wasCalledOnSave).toBeUndefined()
+
+})
+
+it("deve lançar um erro ao salvar um profissional com email duplicado", async () => {
+    shouldEmailExist = true
+
+    const input = {
+        name: 'Zaqueu Junior',
+        email: 'joao@email.com',
+        position: 'programador',
+        salary: 9000.0,
+    }
+
+    await expect(createProfessionalUseCase.execute(input)).rejects.toThrow('O email já está cadastrado')
+
+    expect(wasCalledOnExists).toBe(input.email)
+    expect(wasCalledOnSave).toBeUndefined()
+
+})
+
+it("deve lançar um erro ao salvar um profissional com ocupação vazia", async () => {
+
+    const input = {
+        professionalId: '8465986515',
+        name: 'Zaqueu Junior',
+        email: 'zaqueujunior1998@gmail.com',
+        position: '',
+        salary: 90000,
+    }
+
+    await expect(createProfessionalUseCase.execute(input)).rejects.toThrow('A ocupação é obrigatório')
+    expect(wasCalledOnSave).toBeUndefined()
+
+})
+
+it("deve lançar um erro ao salvar um profissional com salario vazio", async () => {
+
+    const input = {
+        name: 'Zaqueu Junior',
+        email: 'zaqueujunior1998@gmail.com',
+        position: 'programador',
+        salary: 0,
+    }
+
+    await expect(createProfessionalUseCase.execute(input)).rejects.toThrow('O salario é obrigatório')
+    expect(wasCalledOnSave).toBeUndefined()
 
 })

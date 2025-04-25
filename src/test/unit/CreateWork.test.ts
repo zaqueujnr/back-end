@@ -1,42 +1,120 @@
 import WorkRepository from "../../infra/repository/WorkRepository"
 import CreateWork from "../../application/CreateWork"
 
-describe('CreateWork Unit Tests', () => {
-    let workRepository: jest.Mocked<WorkRepository>
-    let createWorkUseCase: CreateWork
+let workRepository: WorkRepository
+let createWorkUseCase: CreateWork
 
+const now = new Date().toISOString()
+let wasCalledOnSave: any = undefined
 
-    beforeEach(() => {
-        workRepository = {
-            saveWork: jest.fn(),
-            updateWork: jest.fn(),
-            getWorks: jest.fn(),
-        } as jest.Mocked<WorkRepository>
+const resetFakeFlags = () => {
+    wasCalledOnSave = undefined
+}
 
-        createWorkUseCase = new CreateWork(workRepository)
+beforeEach(() => {
+    resetFakeFlags()
+
+    workRepository = {
+        saveWork: async (work: any): Promise<void> => {
+            wasCalledOnSave = work
+        },
+        updateWork: async (): Promise<void> => { },
+        getWorks: async (): Promise<any> => { },
+    } as WorkRepository
+
+    createWorkUseCase = new CreateWork(workRepository)
+})
+
+it('Deve salvar um trabalho com sucesso', async () => {
+
+    const input = {
+        description: 'Operador em usina de oleo e gás',
+        dateInit: now,
+        dateEnd: now,
+        typeContract: 'TEMPORARIO',
+        time: 'MANHÃ',
+    }
+
+    await createWorkUseCase.execute(input)
+
+    expect(wasCalledOnSave).toMatchObject({
+        description: input.description,
+        dateInit: input.dateInit,
+        dateEnd: input.dateEnd,
+        typeContract: input.typeContract,
+        time: input.time,
     })
 
-    it('deve salvar um trabalho com sucesso', async () => {
-        
-        const input = {
-             description: 'Operador em usina de oleo e gás',
-             dateInit: '11-07-2025',   
-             dateEnd: '11-12-2025',  
-             typeContract: 'TEMPORARIO',
-             time: 'DIA',
-             companyId: '0000000000000'
-        }
+    expect(wasCalledOnSave.workId).toBeDefined()
+    expect(typeof wasCalledOnSave.workId).toBe('string')
+})
 
-        await createWorkUseCase.execute(input)
+it('Deve lançar um erro ao tentar salvar um trabalho com descrição vazia', async () => {
 
-        expect(workRepository.saveWork).toHaveBeenCalledWith(
-            expect.objectContaining({
-                description: input.description,
-                dateInit: input.dateInit,
-                dateEnd: input.dateEnd,  
-                typeContract: input.typeContract,
-                time: input.time
-            })
-        )
-    })
+    const input = {
+        description: '',
+        dateInit: now,
+        dateEnd: now,
+        typeContract: 'TEMPORARIO',
+        time: 'MANHÃ',
+    }
+
+    await expect(createWorkUseCase.execute(input)).rejects.toThrow('A descrição é obrigatório')
+    expect(wasCalledOnSave).toBeUndefined()
+})
+
+it('Deve lançar um erro ao tentar salvar um trabalho com data vazia', async () => {
+
+    const input = {
+        description: 'teste',
+        dateInit: '',
+        dateEnd: now,
+        typeContract: 'TEMPORARIO',
+        time: 'MANHÃ',
+    }
+
+    await expect(createWorkUseCase.execute(input)).rejects.toThrow('A data é obrigatório')
+    expect(wasCalledOnSave).toBeUndefined()
+})
+
+it('Deve lançar um erro ao tentar salvar um trabalho com data inválida', async () => {
+
+    const input = {
+        description: 'teste',
+        dateInit: '548138',
+        dateEnd: now,
+        typeContract: 'TEMPORARIO',
+        time: 'MANHÃ',
+    }
+
+    await expect(createWorkUseCase.execute(input)).rejects.toThrow('A data é inválida')
+    expect(wasCalledOnSave).toBeUndefined()
+})
+
+it('Deve lançar um erro ao tentar salvar um trabalho com tipo contrato vazio', async () => {
+
+    const input = {
+        description: 'teste',
+        dateInit: now,
+        dateEnd: now,
+        typeContract: '',
+        time: 'MANHÃ',
+    }
+
+    await expect(createWorkUseCase.execute(input)).rejects.toThrow('O tipo de contrato é obrigatório')
+    expect(wasCalledOnSave).toBeUndefined()
+})
+
+it('Deve lançar um erro ao tentar salvar um trabalho com tipo contrato vazio', async () => {
+
+    const input = {
+        description: 'teste',
+        dateInit: now,
+        dateEnd: now,
+        typeContract: 'teste',
+        time: '',
+    }
+
+    await expect(createWorkUseCase.execute(input)).rejects.toThrow('O periodo é obrigatório')
+    expect(wasCalledOnSave).toBeUndefined()
 })

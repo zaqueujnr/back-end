@@ -1,19 +1,19 @@
 import crypto from "crypto";
 import Email from "./Email";
+import DomainUtils from "../utils/DomainUtils";
 
 export default class Company {
     private email: Email;
 
-    constructor(readonly companyId: string, readonly name: string,
-        readonly cnpj: string,
-        email: string,
-        readonly endereco: string) {
+    constructor(readonly companyId: string, readonly name: string, readonly cnpj: string,
+        email: string, readonly endereco: string) {
         this.email = new Email(email)
-        if (!name || name.trim().length === 0) throw new Error("O nome é obrigatório");
-        if (!endereco || endereco.trim().length === 0) throw new Error("O endereco é obrigatório");
-        if (!this.isValidCNPJ(cnpj)) throw new Error("CNPJ inválido");
+        this.validate()
     }
 
+    get id(): string {
+        return this.companyId
+    }
     getEmail () {
         return this.email.getValue()
     }
@@ -22,9 +22,10 @@ export default class Company {
         const companyId = crypto.randomUUID();
         return new Company(companyId, name, cnpj, email, endereco)
     }
-    
-    private isValidCNPJ(cnpj: string): boolean {
-        const cnpjRegex = /^\d{14}$/;
-        return cnpjRegex.test(cnpj);
+
+    private validate() {
+        DomainUtils.validateRequiredString(this.name, "O nome")
+        DomainUtils.validateRequiredString(this.endereco, "O endereço")
+        DomainUtils.isValidCNPJ(this.cnpj)
     }
 }

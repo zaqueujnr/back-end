@@ -6,9 +6,12 @@ export default class CreateWork {
     }
 
     async execute(input: Input): Promise<string> {
-        const work = new Work(input.description, input.dateInit, input.dateEnd, input.typeContract, input.time)
+        const work = Work.create(input.description, input.dateInit, input.dateEnd, input.typeContract, input.time, input.companyId)
 
-        return this.workRepository.saveWork(work)
+        await this.workRepository.saveWork(work)
+
+        return work.id
+
     }
 }
 
@@ -18,5 +21,5 @@ type Input = {
     dateEnd: string,
     typeContract: string,
     time: string,
-    // companyId: string,
+    companyId: string,
 }

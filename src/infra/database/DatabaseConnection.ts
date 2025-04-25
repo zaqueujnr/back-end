@@ -9,7 +9,8 @@ class PgPromiseAdapter implements DatabaseConnection {
     private connection;
     
     constructor() {
-        this.connection = pgp()("postgres://postgres:postgre@localhost:5432/api_tdd");
+      this.connection = pgp()("postgres://user:pass@db:5432/mydb");
+
   }
 
   async query(statement: string, params: any): Promise<any> {
