@@ -9,6 +9,7 @@ COPY ./test-runner/package.json ./
 COPY ./test-runner/tsconfig.json ./
 COPY ./jest.config.js ./
 COPY ./test-runner/wait-for-it.sh ./
+RUN chmod +x /app/wait-for-it.sh
 
 # Instala apenas as dependências mínimas
 RUN npm i
