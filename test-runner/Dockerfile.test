@@ -8,7 +8,6 @@ WORKDIR /app
 COPY ./test-runner/package.json ./
 COPY ./test-runner/tsconfig.json ./
 COPY ./jest.config.js ./
-COPY .env.test ./
 COPY ./test-runner/wait-for-it.sh ./
 
 # Instala apenas as dependências mínimas
