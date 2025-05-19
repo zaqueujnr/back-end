@@ -1,16 +1,20 @@
-import pgp from "pg-promise";
+if (!process.env.SKIP_DOTENV) {
+  const dotenv = require('dotenv');
+  dotenv.config();
+}
 
+import pgp from "pg-promise";
 export default interface DatabaseConnection {
     query (statement: string, params: any): Promise<any>;
     end (): Promise<void>;
 }
 
-class PgPromiseAdapter implements DatabaseConnection {
+export class PgPromiseAdapter implements DatabaseConnection {
     private connection;
     
     constructor() {
-      this.connection = pgp()("postgres://user:pass@db:5432/mydb");
-
+      if(!process.env.DATABASE_URL) throw new Error('')
+      this.connection = pgp()(process.env.DATABASE_URL);
   }
 
   async query(statement: string, params: any): Promise<any> {
@@ -21,7 +25,3 @@ class PgPromiseAdapter implements DatabaseConnection {
     return this.connection.$pool.end()
   }
 }
-
-const pgPromiseConnection = new PgPromiseAdapter()
-
-export { pgPromiseConnection };

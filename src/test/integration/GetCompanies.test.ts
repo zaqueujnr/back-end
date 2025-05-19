@@ -1,12 +1,16 @@
 import axios from "axios";
-import { pgPromiseConnection } from "../../infra/database/DatabaseConnection";
+// import { PgPromiseAdapter } from "../../infra/database/DatabaseConnection";
+import pgPromiseConnection from "../../infra/database/pgPromiseConnection";
 
 axios.defaults.validateStatus = function () {
     return true;
 }
 let input: any;
+let db: any
 
 beforeAll(() => {
+    // db = new PgPromiseAdapter()
+
     input = [
         {
             name: 'Diamante Energia Brasil',
@@ -55,6 +59,7 @@ beforeAll(() => {
         }
     ];
 })
+
 beforeEach(async () => {
     await pgPromiseConnection.query("DELETE FROM company", []);
 })
@@ -64,14 +69,14 @@ afterAll(async () => {
 });
 
 it("Deve buscar todas as empresas com sucesso", async () => {
-    const res1 = await axios.post("http://localhost:3000/company", input[0]);
-    const res2 = await axios.post("http://localhost:3000/company", input[1]);
-    const res3 = await axios.post("http://localhost:3000/company", input[2]);
+    const res1 = await axios.post("http://api:3000/company", input[0]);
+    const res2 = await axios.post("http://api:3000/company", input[1]);
+    const res3 = await axios.post("http://api:3000/company", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
     expect(res3.status).toBe(201)
-    const response = await axios.get("http://localhost:3000/company")
+    const response = await axios.get("http://api:3000/company")
 
     expect(response.status).toBe(200)
 
@@ -92,9 +97,9 @@ it("Deve buscar todas as empresas com sucesso", async () => {
 })
 
 it("Deve retornar as empresas com a palavra chave no nome", async () => {
-    const res1 = await axios.post("http://localhost:3000/company", input[0]);
-    const res2 = await axios.post("http://localhost:3000/company", input[1]);
-    const res3 = await axios.post("http://localhost:3000/company", input[2]);
+    const res1 = await axios.post("http://api:3000/company", input[0]);
+    const res2 = await axios.post("http://api:3000/company", input[1]);
+    const res3 = await axios.post("http://api:3000/company", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
@@ -106,7 +111,7 @@ it("Deve retornar as empresas com a palavra chave no nome", async () => {
         }
     }
 
-    const response = await axios.get("http://localhost:3000/company", { params });
+    const response = await axios.get("http://api:3000/company", { params });
 
     expect(response.status).toBe(200);
 
@@ -128,9 +133,9 @@ it("Deve retornar as empresas com a palavra chave no nome", async () => {
 });
 
 it("Deve retornar as empresas com a palavra chave no email", async () => {
-    const res1 = await axios.post("http://localhost:3000/company", input[0]);
-    const res2 = await axios.post("http://localhost:3000/company", input[1]);
-    const res3 = await axios.post("http://localhost:3000/company", input[2]);
+    const res1 = await axios.post("http://api:3000/company", input[0]);
+    const res2 = await axios.post("http://api:3000/company", input[1]);
+    const res3 = await axios.post("http://api:3000/company", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
@@ -142,7 +147,7 @@ it("Deve retornar as empresas com a palavra chave no email", async () => {
         }
     }
 
-    const response = await axios.get("http://localhost:3000/company", { params });
+    const response = await axios.get("http://api:3000/company", { params });
 
     expect(response.status).toBe(200);
 
@@ -164,9 +169,9 @@ it("Deve retornar as empresas com a palavra chave no email", async () => {
 });
 
 it("Deve retornar as empresas com a palavra chave no endereco", async () => {
-    const res1 = await axios.post("http://localhost:3000/company", input[0]);
-    const res2 = await axios.post("http://localhost:3000/company", input[1]);
-    const res3 = await axios.post("http://localhost:3000/company", input[2]);
+    const res1 = await axios.post("http://api:3000/company", input[0]);
+    const res2 = await axios.post("http://api:3000/company", input[1]);
+    const res3 = await axios.post("http://api:3000/company", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
@@ -178,7 +183,7 @@ it("Deve retornar as empresas com a palavra chave no endereco", async () => {
         }
     }
 
-    const response = await axios.get("http://localhost:3000/company", { params });
+    const response = await axios.get("http://api:3000/company", { params });
 
     expect(response.status).toBe(200);
 
@@ -200,9 +205,9 @@ it("Deve retornar as empresas com a palavra chave no endereco", async () => {
 });
 
 it("Deve ignorar as empresas sem a palavra-chave no nome", async () => {
-    const res1 = await axios.post("http://localhost:3000/company", input[0]);
-    const res2 = await axios.post("http://localhost:3000/company", input[1]);
-    const res3 = await axios.post("http://localhost:3000/company", input[2]);
+    const res1 = await axios.post("http://api:3000/company", input[0]);
+    const res2 = await axios.post("http://api:3000/company", input[1]);
+    const res3 = await axios.post("http://api:3000/company", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
@@ -214,7 +219,7 @@ it("Deve ignorar as empresas sem a palavra-chave no nome", async () => {
         }
     }
 
-    const response = await axios.get("http://localhost:3000/company", { params });
+    const response = await axios.get("http://api:3000/company", { params });
 
     expect(response.status).toBe(200);
 
@@ -225,9 +230,9 @@ it("Deve ignorar as empresas sem a palavra-chave no nome", async () => {
 })
 
 it("Deve ignorar as empresas sem a palavra-chave no email", async () => {
-    const res1 = await axios.post("http://localhost:3000/company", input[0]);
-    const res2 = await axios.post("http://localhost:3000/company", input[1]);
-    const res3 = await axios.post("http://localhost:3000/company", input[2]);
+    const res1 = await axios.post("http://api:3000/company", input[0]);
+    const res2 = await axios.post("http://api:3000/company", input[1]);
+    const res3 = await axios.post("http://api:3000/company", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
@@ -239,7 +244,7 @@ it("Deve ignorar as empresas sem a palavra-chave no email", async () => {
         }
     }
 
-    const response = await axios.get("http://localhost:3000/company", { params });
+    const response = await axios.get("http://api:3000/company", { params });
 
     expect(response.status).toBe(200);
 
@@ -251,9 +256,9 @@ it("Deve ignorar as empresas sem a palavra-chave no email", async () => {
 })
 
 it("Deve ignorar as empresas sem a palavra-chave no endereço", async () => {
-    const res1 = await axios.post("http://localhost:3000/company", input[0]);
-    const res2 = await axios.post("http://localhost:3000/company", input[1]);
-    const res3 = await axios.post("http://localhost:3000/company", input[2]);
+    const res1 = await axios.post("http://api:3000/company", input[0]);
+    const res2 = await axios.post("http://api:3000/company", input[1]);
+    const res3 = await axios.post("http://api:3000/company", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
@@ -265,7 +270,7 @@ it("Deve ignorar as empresas sem a palavra-chave no endereço", async () => {
         }
     }
 
-    const response = await axios.get("http://localhost:3000/company", { params });
+    const response = await axios.get("http://api:3000/company", { params });
 
     expect(response.status).toBe(200);
 
@@ -279,11 +284,11 @@ it("Deve ignorar as empresas sem a palavra-chave no endereço", async () => {
 it("Deve paginar corretamente os resultados", async () => {
 
     for (const company of input) {
-        const response = await axios.post("http://localhost:3000/company", company);
+        const response = await axios.post("http://api:3000/company", company);
         expect(response.status).toBe(201);
     }
 
-    const resPage1 = await axios.get("http://localhost:3000/company", {
+    const resPage1 = await axios.get("http://api:3000/company", {
         params: {
             filters: { keywords: 'sc' },
             limit: 5,
@@ -291,7 +296,7 @@ it("Deve paginar corretamente os resultados", async () => {
         },
     })
 
-    const resPage2 = await axios.get("http://localhost:3000/company", {
+    const resPage2 = await axios.get("http://api:3000/company", {
         params: {
             filters: { keywords: 'sc' },
             limit: 5,

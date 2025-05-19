@@ -11,13 +11,10 @@ export default class GetWorks {
 
   async execute(params: Params = {}): Promise<Output> {
     const workList = await this.workRepository.getWorks(params)
-    const companyList = await this.companyRepository.getCompanies()
-
-    const { companies } = companyList
+    
     const { works, total, totalPages } = workList
-
-    const worksResult = works.map((work: Work): any => {
-      const company = companies.find(c => c.companyId === work.companyId)
+    const worksResult = await Promise.all(works.map(async (work: Work): Promise<any> => {
+      const company = await this.companyRepository.getCompanyById(work.companyId)
     
       return {
         ...work,
@@ -26,7 +23,7 @@ export default class GetWorks {
           name: company?.name
         }
       }
-    })
+    }))
 
     return {
       works: worksResult,

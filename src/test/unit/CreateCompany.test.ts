@@ -10,6 +10,7 @@ import Email from "../../domain/Email";
             saveCompany: jest.fn(),
             updateCompany: jest.fn(),
             getCompanies: jest.fn(),
+            getCompanyById: jest.fn(),
             existsByCNPJ: jest.fn().mockResolvedValue(false),
             existsByEmail: jest.fn().mockResolvedValue(false),
         } as jest.Mocked<CompanyRepository>;

@@ -51,6 +51,7 @@ beforeEach(() => {
 
             return { companies, total: 2, totalPages: 1 }
         },
+        getCompanyById: async (): Promise<any> => { },
         existsByCNPJ: async (): Promise<any> => { },
         existsByEmail: async (): Promise<any> => { },
     } as CompanyRepository

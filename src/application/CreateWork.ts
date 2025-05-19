@@ -17,8 +17,8 @@ export default class CreateWork {
 
 type Input = {
     description: string,
-    dateInit: string,
-    dateEnd: string,
+    dateInit: Date | any,
+    dateEnd: Date | any,
     typeContract: string,
     time: string,
     companyId: string,

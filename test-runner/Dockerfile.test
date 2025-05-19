@@ -1,0 +1,26 @@
+# Etapa base
+FROM node:20-alpine
+
+# Diretório de trabalho
+WORKDIR /app
+
+# Copia apenas os arquivos necessários para testes
+COPY ./test-runner/package.json ./
+COPY ./test-runner/tsconfig.json ./
+COPY ./jest.config.js ./
+COPY .env.test ./
+COPY ./test-runner/wait-for-it.sh ./
+
+# Instala apenas as dependências mínimas
+RUN npm i
+RUN apk add --no-cache bash
+
+# Copia apenas as partes da aplicação usadas nos testes
+COPY ./src/application ./src/application
+COPY ./src/domain ./src/domain
+COPY ./src/infra ./src/infra
+COPY ./src/test ./src/test
+COPY ./src/utils ./src/utils
+
+# Roda os testes
+CMD ["npm", "run", "test"]

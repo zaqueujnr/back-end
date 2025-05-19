@@ -1,10 +1,12 @@
 import { Router } from "express";
 import CreateCompany from "../application/CreateCompany";
 import { CompanyRepositoryDatabase } from "../infra/repository/CompanyRepository";
-import { pgPromiseConnection } from "../infra/database/DatabaseConnection";
+import { PgPromiseAdapter } from "../infra/database/DatabaseConnection";
 import GetCompanies from "../application/GetCompanies";
+import pgPromiseConnection from "../infra/database/pgPromiseConnection";
 
 const router = Router()
+// const pgPromiseConnection = new PgPromiseAdapter()
 const companyRepository = new CompanyRepositoryDatabase(pgPromiseConnection)
 const createCompany = new CreateCompany(companyRepository)
 const getCompanies = new GetCompanies(companyRepository)

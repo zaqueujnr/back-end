@@ -1,13 +1,17 @@
 import axios from "axios";
-import { pgPromiseConnection } from "../../infra/database/DatabaseConnection";
+// import { PgPromiseAdapter } from "../../infra/database/DatabaseConnection";
+import pgPromiseConnection from "../../infra/database/pgPromiseConnection";
 
 let input: any;
+let db: any
 
 axios.defaults.validateStatus = function () {
     return true;
 }
 
 beforeAll(() => {
+    // db = new PgPromiseAdapter()
+
     input = [
         {
             name: 'Zaqueu Vieira Junior',
@@ -29,6 +33,7 @@ beforeAll(() => {
         },
     ];
 })
+
 beforeEach(async () => {
     await pgPromiseConnection.query("DELETE FROM professional", []);
 })
@@ -38,15 +43,15 @@ afterAll(async () => {
 });
 
 it("Deve buscar todos os profissionais com sucesso", async () => {
-    const res1 = await axios.post("http://localhost:3000/professional", input[0]);
-    const res2 = await axios.post("http://localhost:3000/professional", input[1]);
-    const res3 = await axios.post("http://localhost:3000/professional", input[2]);
+    const res1 = await axios.post("http://api:3000/professional", input[0]);
+    const res2 = await axios.post("http://api:3000/professional", input[1]);
+    const res3 = await axios.post("http://api:3000/professional", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
     expect(res3.status).toBe(201)
 
-    const response = await axios.get("http://localhost:3000/professional")
+    const response = await axios.get("http://api:3000/professional")
 
     expect(response.status).toBe(200)
 
@@ -66,9 +71,9 @@ it("Deve buscar todos os profissionais com sucesso", async () => {
 })
 
 it("Deve retornar os profissionais com a palavra chave no nome", async () => {
-    const res1 = await axios.post("http://localhost:3000/professional", input[0]);
-    const res2 = await axios.post("http://localhost:3000/professional", input[1]);
-    const res3 = await axios.post("http://localhost:3000/professional", input[2]);
+    const res1 = await axios.post("http://api:3000/professional", input[0]);
+    const res2 = await axios.post("http://api:3000/professional", input[1]);
+    const res3 = await axios.post("http://api:3000/professional", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
@@ -80,7 +85,7 @@ it("Deve retornar os profissionais com a palavra chave no nome", async () => {
         }
     }
 
-    const response = await axios.get("http://localhost:3000/professional", { params });
+    const response = await axios.get("http://api:3000/professional", { params });
 
     expect(response.status).toBe(200);
 
@@ -91,9 +96,9 @@ it("Deve retornar os profissionais com a palavra chave no nome", async () => {
 });
 
 it("Deve retornar os profissionais com a palavra chave no email", async () => {
-    const res1 = await axios.post("http://localhost:3000/professional", input[0]);
-    const res2 = await axios.post("http://localhost:3000/professional", input[1]);
-    const res3 = await axios.post("http://localhost:3000/professional", input[2]);
+    const res1 = await axios.post("http://api:3000/professional", input[0]);
+    const res2 = await axios.post("http://api:3000/professional", input[1]);
+    const res3 = await axios.post("http://api:3000/professional", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
@@ -105,7 +110,7 @@ it("Deve retornar os profissionais com a palavra chave no email", async () => {
         }
     }
 
-    const response = await axios.get("http://localhost:3000/professional", { params });
+    const response = await axios.get("http://api:3000/professional", { params });
 
     expect(response.status).toBe(200);
 
@@ -116,9 +121,9 @@ it("Deve retornar os profissionais com a palavra chave no email", async () => {
 });
 
 it("Deve retornar os profissionais com a palavra chave position", async () => {
-    const res1 = await axios.post("http://localhost:3000/professional", input[0]);
-    const res2 = await axios.post("http://localhost:3000/professional", input[1]);
-    const res3 = await axios.post("http://localhost:3000/professional", input[2]);
+    const res1 = await axios.post("http://api:3000/professional", input[0]);
+    const res2 = await axios.post("http://api:3000/professional", input[1]);
+    const res3 = await axios.post("http://api:3000/professional", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
@@ -130,7 +135,7 @@ it("Deve retornar os profissionais com a palavra chave position", async () => {
         }
     }
 
-    const response = await axios.get("http://localhost:3000/professional", { params });
+    const response = await axios.get("http://api:3000/professional", { params });
 
     expect(response.status).toBe(200);
 
@@ -141,9 +146,9 @@ it("Deve retornar os profissionais com a palavra chave position", async () => {
 });
 
 it("Deve ignorar os profissionais sem a palavra-chave", async () => {
-    const res1 = await axios.post("http://localhost:3000/professional", input[0]);
-    const res2 = await axios.post("http://localhost:3000/professional", input[1]);
-    const res3 = await axios.post("http://localhost:3000/professional", input[2]);
+    const res1 = await axios.post("http://api:3000/professional", input[0]);
+    const res2 = await axios.post("http://api:3000/professional", input[1]);
+    const res3 = await axios.post("http://api:3000/professional", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
@@ -155,7 +160,7 @@ it("Deve ignorar os profissionais sem a palavra-chave", async () => {
         }
     }
 
-    const response = await axios.get("http://localhost:3000/professional", { params });
+    const response = await axios.get("http://api:3000/professional", { params });
 
     expect(response.status).toBe(200);
 
@@ -214,11 +219,11 @@ it("Deve paginar corretamente os resultados", async () => {
     ]
 
     for (const professional of professionals) {
-        const response = await axios.post("http://localhost:3000/professional", professional);
+        const response = await axios.post("http://api:3000/professional", professional);
         expect(response.status).toBe(201);
     }
 
-    const resPage1 = await axios.get("http://localhost:3000/professional", {
+    const resPage1 = await axios.get("http://api:3000/professional", {
         params: {
             filters: { keywords: 'vi' },
             limit: 5,
@@ -226,7 +231,7 @@ it("Deve paginar corretamente os resultados", async () => {
         },
     })
 
-    const resPage2 = await axios.get("http://localhost:3000/professional", {
+    const resPage2 = await axios.get("http://api:3000/professional", {
         params: {
             filters: { keywords: 'vi' },
             limit: 5,
