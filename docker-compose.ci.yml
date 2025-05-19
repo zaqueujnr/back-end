@@ -1,0 +1,47 @@
+services:
+  api:
+    build: ./back-end
+    container_name: api
+    environment: 
+      PORT: 3000
+      DATABASE_URL: ${DATABASE_URL}
+      SKIP_DOTENV: true
+    command: npm run dev
+    depends_on:
+      - db-test   
+    networks:
+      - test-network
+
+  api-test:
+    build:
+      context: ./back-end
+      dockerfile: test-runner/Dockerfile.test
+    container_name: api-test
+    environment: 
+      PORT: 3000
+      DATABASE_URL: ${DATABASE_URL}
+      SKIP_DOTENV: true
+    depends_on:
+      - api
+      - db-test
+    entrypoint: ["bash", "-c", "./wait-for-it.sh api 3000 -- npm run test"]
+    networks:
+      - test-network
+
+  db-test:
+    image: postgres
+    container_name: db-test
+    environment:
+      POSTGRES_DB: mydb_test
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+    tmpfs:
+      - /var/lib/postgresql/data
+    volumes:
+      - ./create.test.sql:/docker-entrypoint-initdb.d/create.test.sql
+    networks:
+      - test-network
+
+networks:
+  test-network:
+    driver: bridge

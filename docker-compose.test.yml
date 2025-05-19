@@ -1,0 +1,60 @@
+services:
+  api:
+    build: ./
+    container_name: api
+    env_file: ./.env.test
+    command: npm run dev
+    ports:
+      - "3004:3000"
+    depends_on:
+      - db-test
+    networks:
+      - test-network
+    environment:
+      CHOKIDAR_USEPOLLING: "true"      
+    volumes:
+      - ./:/app
+      - /app/node_modules
+
+  api-test:
+    build:
+      context: ./
+      dockerfile: test-runner/Dockerfile.test
+    container_name: api-test
+    env_file: ./.env.test
+    depends_on:
+      - api
+      - db-test
+    environment:
+      CHOKIDAR_USEPOLLING: "true"
+    volumes:
+      - ./src/test:/app/src/test
+      - ./src/application:/app/src/application
+      - ./src/domain:/app/src/domain
+      - ./src/infra:/app/src/infra
+      - ./src/utils:/app/src/utils
+    entrypoint: ["bash", "-c", "./wait-for-it.sh api 3000 -- npm run test"]
+    networks:
+      - test-network
+
+  db-test:
+    image: postgres
+    container_name: db-test
+    env_file: ./.env.db
+    environment:
+      POSTGRES_DB: mydb_test
+    ports:
+      - "5434:5432"
+    tmpfs:
+      - /var/lib/postgresql/data
+    volumes:
+      - ./create.test.sql:/docker-entrypoint-initdb.d/create.test.sql
+    networks:
+      - test-network
+
+volumes:
+  pgdata-test:
+
+networks:
+  test-network:
+    driver: bridge
