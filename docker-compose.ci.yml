@@ -1,6 +1,6 @@
 services:
   api:
-    build: ./back-end
+    build: ./
     container_name: api
     environment: 
       PORT: 3000
@@ -14,7 +14,7 @@ services:
 
   api-test:
     build:
-      context: ./back-end
+      context: ./
       dockerfile: test-runner/Dockerfile.test
     container_name: api-test
     environment: 
