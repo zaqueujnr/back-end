@@ -23,7 +23,6 @@ export default class Company {
         return new Company(companyId, name, cnpj, email, endereco)
     }
 
-    
     private validate() {
         DomainUtils.validateRequiredString(this.name, "O nome")
         DomainUtils.validateRequiredString(this.endereco, "O endereço")
