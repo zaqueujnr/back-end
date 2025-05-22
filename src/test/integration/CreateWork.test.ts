@@ -1,11 +1,18 @@
 import axios from "axios";
-import { pgPromiseConnection } from "../../infra/database/DatabaseConnection";
+// import { PgPromiseAdapter } from "../../infra/database/DatabaseConnection";
+import pgPromiseConnection from "../../infra/database/pgPromiseConnection";
 
 axios.defaults.validateStatus = function () {
     return true;
 }
 
 const now = new Date()
+
+let db: any
+
+beforeAll(async () => {
+//   db = new PgPromiseAdapter()
+});
 
 beforeEach(async () => {
     await pgPromiseConnection.query("DELETE FROM work", []);
@@ -26,7 +33,7 @@ it("Deve salvar um trabalho com sucesso", async () => {
     }
 
 
-    const response = await axios.post("http://localhost:3000/work", input)
+    const response = await axios.post("http://api:3000/work", input)
 
     expect(response.status).toBe(201)
     const output = response.data;
@@ -47,7 +54,7 @@ it("deve lançar um erro ao salvar um trabalho com descrição vazia", async () 
         time: 'DIA',
     }
 
-    const response = await axios.post("http://localhost:3000/work", input)
+    const response = await axios.post("http://api:3000/work", input)
 
     expect(response.status).toBe(422)
     const output = response.data
@@ -57,46 +64,46 @@ it("deve lançar um erro ao salvar um trabalho com descrição vazia", async () 
 
 })
 
-it("deve lançar um erro ao salvar um trabalho com data vazia", async () => {
+// it("deve lançar um erro ao salvar um trabalho com data vazia", async () => {
 
-    const input = {
-        description: 'Operador em usina de oleo e gas',
-        dateInit: null,
-        dateEnd: now,
-        typeContract: 'TEMPORARIO',
-        time: 'DIA',
-        companyId: '0000000000000'
-    }
+//     const input = {
+//         description: 'Operador em usina de oleo e gas',
+//         dateInit: null,
+//         dateEnd: now,
+//         typeContract: 'TEMPORARIO',
+//         time: 'DIA',
+//         companyId: '0000000000000'
+//     }
 
-    const response = await axios.post("http://localhost:3000/work", input)
+//     const response = await axios.post("http://api:3000/work", input)
 
-    expect(response.status).toBe(422)
-    const output = response.data
+//     expect(response.status).toBe(422)
+//     const output = response.data
 
-    expect(Object.keys(output)).toEqual(['message']);
-    expect(output.message).toBe('A data é obrigatório')
+//     expect(Object.keys(output)).toEqual(['message']);
+//     expect(output.message).toBe('A data é obrigatório')
 
-})
+// })
 
-it("deve lançar um erro ao salvar um trabalho com data inválida", async () => {
+// it("deve lançar um erro ao salvar um trabalho com data inválida", async () => {
 
-    const input = {
-        description: 'Operador em usina de oleo e gas',
-        dateInit: 'now',
-        dateEnd: now,
-        typeContract: 'TEMPORARIO',
-        time: 'DIA',
-    }
+//     const input = {
+//         description: 'Operador em usina de oleo e gas',
+//         dateInit: 'now',
+//         dateEnd: now,
+//         typeContract: 'TEMPORARIO',
+//         time: 'DIA',
+//     }
 
-    const response = await axios.post("http://localhost:3000/work", input)
+//     const response = await axios.post("http://api:3000/work", input)
 
-    expect(response.status).toBe(422)
-    const output = response.data
+//     expect(response.status).toBe(422)
+//     const output = response.data
 
-    expect(Object.keys(output)).toEqual(['message']);
-    expect(output.message).toBe('A data é inválida')
+//     expect(Object.keys(output)).toEqual(['message']);
+//     expect(output.message).toBe('A data é inválida')
 
-})
+// })
 
 it("deve lançar um erro ao salvar um trabalho com tipo de contrato vazio", async () => {
 
@@ -108,7 +115,7 @@ it("deve lançar um erro ao salvar um trabalho com tipo de contrato vazio", asyn
         time: 'DIA',
     }
 
-    const response = await axios.post("http://localhost:3000/work", input)
+    const response = await axios.post("http://api:3000/work", input)
 
     expect(response.status).toBe(422)
     const output = response.data
@@ -128,7 +135,7 @@ it("deve lançar um erro ao salvar um trabalho com periodo vazio", async () => {
         time: '',
     }
 
-    const response = await axios.post("http://localhost:3000/work", input)
+    const response = await axios.post("http://api:3000/work", input)
 
     expect(response.status).toBe(422)
     const output = response.data

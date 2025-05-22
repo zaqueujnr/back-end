@@ -1,10 +1,12 @@
 import { Router } from "express";
 import CreateProfessional from "../application/CreateProfessional";
 import { ProfessionalRepositoryDatabase } from "../infra/repository/ProfessionalRepository";
-import { pgPromiseConnection } from "../infra/database/DatabaseConnection";
+import { PgPromiseAdapter } from "../infra/database/DatabaseConnection";
 import GetProfessionals from "../application/GetProfessionals";
+import pgPromiseConnection from "../infra/database/pgPromiseConnection";
 
 const router = Router()
+// const pgPromiseConnection = new PgPromiseAdapter()
 const professionalRepository = new ProfessionalRepositoryDatabase(pgPromiseConnection)
 const createProfessional = new CreateProfessional(professionalRepository)
 const getProfessionals = new GetProfessionals(professionalRepository)

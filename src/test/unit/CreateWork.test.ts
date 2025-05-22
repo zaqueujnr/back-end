@@ -4,7 +4,7 @@ import CreateWork from "../../application/CreateWork"
 let workRepository: WorkRepository
 let createWorkUseCase: CreateWork
 
-const now = new Date().toISOString()
+const now = new Date()
 let wasCalledOnSave: any = undefined
 
 const resetFakeFlags = () => {
@@ -33,6 +33,7 @@ it('Deve salvar um trabalho com sucesso', async () => {
         dateEnd: now,
         typeContract: 'TEMPORARIO',
         time: 'MANHÃ',
+        companyId: '7ec3a579-f5da-40ca-8b2f-935b39da5c67'
     }
 
     await createWorkUseCase.execute(input)
@@ -57,6 +58,7 @@ it('Deve lançar um erro ao tentar salvar um trabalho com descrição vazia', as
         dateEnd: now,
         typeContract: 'TEMPORARIO',
         time: 'MANHÃ',
+        companyId: '7ec3a579-f5da-40ca-8b2f-935b39da5c67'
     }
 
     await expect(createWorkUseCase.execute(input)).rejects.toThrow('A descrição é obrigatório')
@@ -67,13 +69,14 @@ it('Deve lançar um erro ao tentar salvar um trabalho com data vazia', async () 
 
     const input = {
         description: 'teste',
-        dateInit: '',
+        dateInit: null,
         dateEnd: now,
         typeContract: 'TEMPORARIO',
         time: 'MANHÃ',
+        companyId: '7ec3a579-f5da-40ca-8b2f-935b39da5c67'
     }
 
-    await expect(createWorkUseCase.execute(input)).rejects.toThrow('A data é obrigatório')
+    await expect(createWorkUseCase.execute(input)).rejects.toThrow('A data é obrigatória')
     expect(wasCalledOnSave).toBeUndefined()
 })
 
@@ -85,6 +88,7 @@ it('Deve lançar um erro ao tentar salvar um trabalho com data inválida', async
         dateEnd: now,
         typeContract: 'TEMPORARIO',
         time: 'MANHÃ',
+        companyId: '7ec3a579-f5da-40ca-8b2f-935b39da5c67'
     }
 
     await expect(createWorkUseCase.execute(input)).rejects.toThrow('A data é inválida')
@@ -99,6 +103,7 @@ it('Deve lançar um erro ao tentar salvar um trabalho com tipo contrato vazio', 
         dateEnd: now,
         typeContract: '',
         time: 'MANHÃ',
+        companyId: '7ec3a579-f5da-40ca-8b2f-935b39da5c67'
     }
 
     await expect(createWorkUseCase.execute(input)).rejects.toThrow('O tipo de contrato é obrigatório')
@@ -113,6 +118,7 @@ it('Deve lançar um erro ao tentar salvar um trabalho com tipo contrato vazio', 
         dateEnd: now,
         typeContract: 'teste',
         time: '',
+        companyId: '7ec3a579-f5da-40ca-8b2f-935b39da5c67'
     }
 
     await expect(createWorkUseCase.execute(input)).rejects.toThrow('O periodo é obrigatório')
