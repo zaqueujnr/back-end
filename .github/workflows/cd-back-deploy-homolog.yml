@@ -1,0 +1,19 @@
+name: CD - backend DEPLOY homolog
+
+on:
+ push:
+   branches: 
+    - develop
+
+jobs:
+  back_deploy_homolog:
+    if: github.ref == 'refs/heads/develop'
+    name: Backend Homolog CD 
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Deploy Homolog CI back-end
+        run: echo "Deployando para homolog..."
+
