@@ -1,8 +1,8 @@
 services:
   api:
-    build: ./
+    build: .
     container_name: api
-    env_file: ./.env.test
+    env_file: .env.test
     command: npm run dev
     ports:
       - "3004:3000"
@@ -18,10 +18,10 @@ services:
 
   api-test:
     build:
-      context: ./
+      context: .
       dockerfile: test-runner/Dockerfile.test
     container_name: api-test
-    env_file: ./.env.test
+    env_file: .env.test
     depends_on:
       - api
       - db-test
@@ -40,7 +40,7 @@ services:
   db-test:
     image: postgres
     container_name: db-test
-    env_file: ./.env.db
+    env_file: .env.db
     environment:
       POSTGRES_DB: mydb_test
     ports:
