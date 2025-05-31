@@ -1,0 +1,19 @@
+name: CD - backend DEPLOY Production
+
+on:
+  push:
+   branches: 
+    - main
+    
+jobs:
+  back_deploy_prod:
+    if: github.ref == 'refs/heads/main'
+    name: Backend Prod CD 
+    
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout do código
+        uses: actions/checkout@v4
+
+      - name: Deploy Prod CI back-end
+        run: echo "Deployando para production..."
