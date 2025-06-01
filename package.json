@@ -8,7 +8,9 @@
   "description": "",
   "scripts": {
     "dev": "nodemon --watch src --watch package.json --ext js,ts,json --ignore node_modules --ignore public --ignore dist src/server/server.ts",
-    "start:test": "ts-node src/server/server.ts"
+    "start:test": "ts-node src/server/server.ts",
+    "build": "tsc",
+    "start": "node dist/server/server.js"
   },
   "dependencies": {
     "@types/express": "^5.0.0",
