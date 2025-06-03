@@ -22,7 +22,7 @@ services:
       DATABASE_URL: ${DATABASE_URL}
       SKIP_DOTENV: true
     depends_on:
-      - api
+      - app-node
       - db-test
     entrypoint: ["bash", "-c", "./wait-for-it.sh api 3000 -- npm run test"]
     networks:
