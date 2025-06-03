@@ -24,7 +24,7 @@ services:
     depends_on:
       - app-node
       - db-test
-    entrypoint: ["bash", "-c", "./wait-for-it.sh api 3000 -- npm run test"]
+    entrypoint: ["bash", "-c", "./wait-for-it.sh app-node 3000 -- npm run test"]
     networks:
       - test-network
 
