@@ -38,7 +38,7 @@ services:
     tmpfs:
       - /var/lib/postgresql/data
     volumes:
-      - ./create.test.sql:/docker-entrypoint-initdb.d/create.test.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - test-network
 

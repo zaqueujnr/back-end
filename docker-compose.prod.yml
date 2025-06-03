@@ -1,0 +1,31 @@
+services:
+  api-prod:
+    build:
+      context: .
+      dockerfile: Dockerfile.build
+    container_name: api-prod
+    env_file: .env.prod
+    command: npm run start
+    restart: unless-stopped
+    depends_on:
+      - db-prod
+    networks:
+      - prod-network
+
+  db-prod:
+    image: postgres
+    container_name: db-prod
+    env_file: .env.db.prod
+    restart: unless-stopped
+    volumes:
+      - pgdata_prod:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - prod-network
+
+volumes:
+  pgdata_prod:
+
+networks:
+  prod-network:
+    driver: bridge
