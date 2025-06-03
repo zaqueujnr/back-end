@@ -1,5 +1,9 @@
 node_modules
 .env
-.env.db
 .env.dev
 .env.test
+.env.hml
+.env.prod
+.env.db
+.env.db.hml
+.env.db.prod
