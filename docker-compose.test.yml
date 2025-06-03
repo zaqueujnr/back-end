@@ -1,7 +1,7 @@
 services:
-  api:
+  app-node:
     build: .
-    container_name: api
+    container_name: app-node
     env_file: .env.test
     command: npm run dev
     ports:
@@ -23,7 +23,7 @@ services:
     container_name: api-test
     env_file: .env.test
     depends_on:
-      - api
+      - app-node
       - db-test
     environment:
       CHOKIDAR_USEPOLLING: "true"
@@ -33,7 +33,7 @@ services:
       - ./src/domain:/app/src/domain
       - ./src/infra:/app/src/infra
       - ./src/utils:/app/src/utils
-    entrypoint: ["bash", "-c", "./wait-for-it.sh api 3000 -- npm run test"]
+    entrypoint: ["bash", "-c", "./wait-for-it.sh app-node 3000 -- npm run test"]
     networks:
       - test-network
 
@@ -48,7 +48,7 @@ services:
     tmpfs:
       - /var/lib/postgresql/data
     volumes:
-      - ./create.test.sql:/docker-entrypoint-initdb.d/create.test.sql
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
     networks:
       - test-network
 
