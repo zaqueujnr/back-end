@@ -1,7 +1,7 @@
 services:
-  api:
+  app-node:
     build: ./
-    container_name: api
+    container_name: app-node
     environment: 
       PORT: 3000
       DATABASE_URL: ${DATABASE_URL}
