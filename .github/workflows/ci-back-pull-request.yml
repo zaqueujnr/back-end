@@ -2,11 +2,11 @@ name: CI - backend tests pull
 
 on:
   pull_request:
-    paths: 
-      - '**'
     branches: 
       - develop
       - main
+    paths:
+      - 'src/**'
 
 jobs:
   back_end_tests_pull:
