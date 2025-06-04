@@ -15,14 +15,14 @@ API RESTful para encontrar empresas, vagas de trabalho e profissionais na área 
 
 .env.db .env.db.hml .env.db.prod .env.db.dev (examples)
 
-POSTGRES_USER=postgres
-POSTGRES_PASSWORD=password
+POSTGRES_USER=postgres  
+POSTGRES_PASSWORD=password  
 
 .env .env.hml .env.prod .env.dev (examples)
 
-PORT=3000
-DATABASE_URL=postgres://user:password@db_service:5432/db_name
-SKIP_DOTENV=true
+PORT=3000  
+DATABASE_URL=postgres://user:password@db_service:5432/db_name  
+SKIP_DOTENV=true  
 
 ## Como rodar o projeto local
 
