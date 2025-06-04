@@ -5,8 +5,8 @@ on:
     branches: 
       - develop
       - main
-    paths:
-      - 'src/**'
+    # paths:
+    #   - 'src/**'
 
 jobs:
   back_end_tests_pull:
