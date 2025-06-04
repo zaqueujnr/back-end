@@ -1,4 +1,4 @@
-# 📦 Oportunidades da industria 
+# 📦 Oportunidades na indústria 
 
 API RESTful para encontrar empresas, vagas de trabalho e profissionais na área industrial.
 
@@ -10,6 +10,13 @@ API RESTful para encontrar empresas, vagas de trabalho e profissionais na área 
 - [Typescript](https://www.typescriptlang.org/)
 - [Jest](https://jestjs.io/pt-BR/)
 - [CI/CD](https://github.com/features/actions)
+
+## 🧠 Metodologias e Boas Práticas Utilizadas
+
+- [x] **SOLID** – Princípios de design orientado a objetos
+- [x] **Clean Architecture** – Separação de responsabilidades por camadas
+- [x] **DDD (Domain-Driven Design)** – Foco na lógica de negócio
+- [x] **TDD (Test-Driven Development)** – Desenvolvimento guiado por testes
 
 ## Configure as variáveis de ambiente
 
