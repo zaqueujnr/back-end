@@ -74,6 +74,7 @@ it("Deve buscar todas as empresas com sucesso", async () => {
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
     expect(res3.status).toBe(201)
+
     const response = await axios.get("http://app-node:3000/company")
 
     expect(response.status).toBe(200)
@@ -287,6 +288,7 @@ it("Deve paginar corretamente os resultados", async () => {
     }
 
     const resPage1 = await axios.get("http://app-node:3000/company", {
+
         params: {
             filters: { keywords: 'sc' },
             limit: 5,

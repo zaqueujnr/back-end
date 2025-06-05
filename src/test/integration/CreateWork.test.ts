@@ -6,6 +6,7 @@ axios.defaults.validateStatus = function () {
 }
 
 const now = new Date()
+let db: any
 
 beforeEach(async () => {
     await pgPromiseConnection.query("DELETE FROM work", []);

@@ -115,6 +115,7 @@ it("deve lançar um erro ao salvar uma empresa com email inválido", async () =>
 
     const response = await axios.post("http://app-node:3000/company", input)
 
+
     expect(response.status).toBe(422)
     const output = response.data
 
@@ -184,6 +185,7 @@ it("deve lançar um erro ao salvar uma empresa endereco vazio", async () => {
     }
 
     const response = await axios.post("http://app-node:3000/company", input)
+
     const output = response.data
     expect(response.status).toBe(422)
 

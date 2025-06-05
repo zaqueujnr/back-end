@@ -50,7 +50,7 @@ it("Deve buscar todos os profissionais com sucesso", async () => {
     expect(res3.status).toBe(201)
 
     const response = await axios.get("http://app-node:3000/professional")
-
+    
     expect(response.status).toBe(200)
 
     const { professionals: output } = response.data;
@@ -147,7 +147,7 @@ it("Deve ignorar os profissionais sem a palavra-chave", async () => {
     const res1 = await axios.post("http://app-node:3000/professional", input[0]);
     const res2 = await axios.post("http://app-node:3000/professional", input[1]);
     const res3 = await axios.post("http://app-node:3000/professional", input[2]);
-
+  
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
     expect(res3.status).toBe(201)
