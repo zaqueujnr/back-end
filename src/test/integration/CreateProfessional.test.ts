@@ -1,11 +1,10 @@
 import axios from "axios";
+// import { PgPromiseAdapter } from "../../infra/database/DatabaseConnection";
 import pgPromiseConnection from "../../infra/database/pgPromiseConnection";
 
 axios.defaults.validateStatus = function () {
     return true;
   }
-
-let db: any
 
 beforeEach(async () => {
     await pgPromiseConnection.query("DELETE FROM professional", []);
@@ -25,7 +24,7 @@ it("Deve salvar um profissional com sucesso", async () => {
     }
 
     const response = await axios.post("http://app-node:3000/professional", input)
-    
+
     expect(response.status).toBe(201)
     const output = response.data;
 
@@ -121,7 +120,6 @@ it("deve lançar um erro ao salvar um profissional com email duplicado", async (
     }
 
     const response1 = await axios.post("http://app-node:3000/professional", input)
-
     const output1 = response1.data
     expect(response1.status).toBe(201)
 
@@ -130,7 +128,6 @@ it("deve lançar um erro ao salvar um profissional com email duplicado", async (
     expect(output1.id).toMatch(/[a-z0-9\-]{36}/);
 
     const response2 = await axios.post("http://app-node:3000/professional", input)
-
     const output2 = response2.data
     expect(response2.status).toBe(422)
 
@@ -149,7 +146,6 @@ it("deve lançar um erro ao salvar um profissional com ocupação vazia", async 
     }
 
     const response = await axios.post("http://app-node:3000/professional", input)
-
     const output = response.data
     expect(response.status).toBe(422)
 
@@ -168,7 +164,6 @@ it("deve lançar um erro ao salvar um profissional com salario vazio", async () 
     }
 
     const response = await axios.post("http://app-node:3000/professional", input)
-
     const output = response.data
     expect(response.status).toBe(422)
 
