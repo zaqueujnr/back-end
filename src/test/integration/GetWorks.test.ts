@@ -3,7 +3,6 @@ import pgPromiseConnection from "../../infra/database/pgPromiseConnection";
 
 const now = new Date().toISOString();
 let input: any;
-let db: any
 
 axios.defaults.validateStatus = function () {
     return true;
@@ -88,7 +87,7 @@ it("Deve retornar os trabalhos com a palavra chave na descrição", async () => 
     }
 
     const response = await axios.get("http://app-node:3000/work", { params });
-  
+
     expect(response.status).toBe(200);
 
     const output = response.data.works;
@@ -176,7 +175,7 @@ it("Deve ignorar os trabalhos sem a palavra-chave no tipo de contrato", async ()
     const res1 = await axios.post("http://app-node:3000/work", input[0]);
     const res2 = await axios.post("http://app-node:3000/work", input[1]);
     const res3 = await axios.post("http://app-node:3000/work", input[2]);
-  
+
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
     expect(res3.status).toBe(201)
@@ -214,7 +213,7 @@ it("Deve ignorar os trabalhos sem a palavra-chave no periodo", async () => {
     }
 
     const response = await axios.get("http://app-node:3000/work", { params });
-  
+
     expect(response.status).toBe(200);
 
     const output = response.data.works;
