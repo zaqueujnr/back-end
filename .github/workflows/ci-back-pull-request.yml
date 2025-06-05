@@ -1,4 +1,4 @@
-name: CI - backend tests pull
+name: CI - backend tests 89
 
 on:
   pull_request:
@@ -8,7 +8,7 @@ on:
 
 jobs:
   back_end_tests_89:
-    name: Backend CI pull
+    name: Backend CI 89
     runs-on: ubuntu-latest
     steps:
       - name: Checkout do código
