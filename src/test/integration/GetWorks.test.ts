@@ -1,5 +1,4 @@
 import axios from "axios";
-// import { PgPromiseAdapter } from "../../infra/database/DatabaseConnection";
 import pgPromiseConnection from "../../infra/database/pgPromiseConnection";
 
 const now = new Date().toISOString();
@@ -11,7 +10,6 @@ axios.defaults.validateStatus = function () {
 }
 
 beforeAll(() => {
-    // db = new PgPromiseAdapter()
     input = [
         {
             description: 'ACESSO A CORDA',
@@ -46,15 +44,15 @@ afterAll(async () => {
 });
 
 it("Deve buscar todos os trabalhos com sucesso", async () => {
-    const res1 = await axios.post("http://api:3000/work", input[0]);
-    const res2 = await axios.post("http://api:3000/work", input[1]);
-    const res3 = await axios.post("http://api:3000/work", input[2]);
+    const res1 = await axios.post("http://app-node:3000/work", input[0]);
+    const res2 = await axios.post("http://app-node:3000/work", input[1]);
+    const res3 = await axios.post("http://app-node:3000/work", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
     expect(res3.status).toBe(201)
 
-    const response = await axios.get("http://api:3000/work")
+    const response = await axios.get("http://app-node:3000/work")
 
     expect(response.status).toBe(200)
 
@@ -75,9 +73,9 @@ it("Deve buscar todos os trabalhos com sucesso", async () => {
 })
 
 it("Deve retornar os trabalhos com a palavra chave na descrição", async () => {
-    const res1 = await axios.post("http://api:3000/work", input[0]);
-    const res2 = await axios.post("http://api:3000/work", input[1]);
-    const res3 = await axios.post("http://api:3000/work", input[2]);
+    const res1 = await axios.post("http://app-node:3000/work", input[0]);
+    const res2 = await axios.post("http://app-node:3000/work", input[1]);
+    const res3 = await axios.post("http://app-node:3000/work", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
@@ -89,8 +87,8 @@ it("Deve retornar os trabalhos com a palavra chave na descrição", async () => 
         }
     }
 
-    const response = await axios.get("http://api:3000/work", { params });
-
+    const response = await axios.get("http://app-node:3000/work", { params });
+  
     expect(response.status).toBe(200);
 
     const output = response.data.works;
@@ -100,9 +98,9 @@ it("Deve retornar os trabalhos com a palavra chave na descrição", async () => 
 });
 
 it("Deve retornar os trabalhos com a palavra chave no tipo de contrato", async () => {
-    const res1 = await axios.post("http://api:3000/work", input[0]);
-    const res2 = await axios.post("http://api:3000/work", input[1]);
-    const res3 = await axios.post("http://api:3000/work", input[2]);
+    const res1 = await axios.post("http://app-node:3000/work", input[0]);
+    const res2 = await axios.post("http://app-node:3000/work", input[1]);
+    const res3 = await axios.post("http://app-node:3000/work", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
@@ -114,7 +112,7 @@ it("Deve retornar os trabalhos com a palavra chave no tipo de contrato", async (
         }
     }
 
-    const response = await axios.get("http://api:3000/work", { params });
+    const response = await axios.get("http://app-node:3000/work", { params });
 
     expect(response.status).toBe(200);
 
@@ -125,9 +123,9 @@ it("Deve retornar os trabalhos com a palavra chave no tipo de contrato", async (
 });
 
 it("Deve retornar os trabalhos com a palavra chave no periodo", async () => {
-    const res1 = await axios.post("http://api:3000/work", input[0]);
-    const res2 = await axios.post("http://api:3000/work", input[1]);
-    const res3 = await axios.post("http://api:3000/work", input[2]);
+    const res1 = await axios.post("http://app-node:3000/work", input[0]);
+    const res2 = await axios.post("http://app-node:3000/work", input[1]);
+    const res3 = await axios.post("http://app-node:3000/work", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
@@ -139,7 +137,7 @@ it("Deve retornar os trabalhos com a palavra chave no periodo", async () => {
         }
     }
 
-    const response = await axios.get("http://api:3000/work", { params });
+    const response = await axios.get("http://app-node:3000/work", { params });
 
     expect(response.status).toBe(200);
 
@@ -150,9 +148,9 @@ it("Deve retornar os trabalhos com a palavra chave no periodo", async () => {
 });
 
 it("Deve ignorar os trabalhos sem a palavra-chave na descrição", async () => {
-    const res1 = await axios.post("http://api:3000/work", input[0]);
-    const res2 = await axios.post("http://api:3000/work", input[1]);
-    const res3 = await axios.post("http://api:3000/work", input[2]);
+    const res1 = await axios.post("http://app-node:3000/work", input[0]);
+    const res2 = await axios.post("http://app-node:3000/work", input[1]);
+    const res3 = await axios.post("http://app-node:3000/work", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
@@ -164,7 +162,7 @@ it("Deve ignorar os trabalhos sem a palavra-chave na descrição", async () => {
         }
     }
 
-    const response = await axios.get("http://api:3000/work", { params });
+    const response = await axios.get("http://app-node:3000/work", { params });
 
     expect(response.status).toBe(200);
 
@@ -175,10 +173,10 @@ it("Deve ignorar os trabalhos sem a palavra-chave na descrição", async () => {
 })
 
 it("Deve ignorar os trabalhos sem a palavra-chave no tipo de contrato", async () => {
-    const res1 = await axios.post("http://api:3000/work", input[0]);
-    const res2 = await axios.post("http://api:3000/work", input[1]);
-    const res3 = await axios.post("http://api:3000/work", input[2]);
-
+    const res1 = await axios.post("http://app-node:3000/work", input[0]);
+    const res2 = await axios.post("http://app-node:3000/work", input[1]);
+    const res3 = await axios.post("http://app-node:3000/work", input[2]);
+  
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
     expect(res3.status).toBe(201)
@@ -189,7 +187,7 @@ it("Deve ignorar os trabalhos sem a palavra-chave no tipo de contrato", async ()
         }
     }
 
-    const response = await axios.get("http://api:3000/work", { params });
+    const response = await axios.get("http://app-node:3000/work", { params });
 
     expect(response.status).toBe(200);
 
@@ -201,9 +199,9 @@ it("Deve ignorar os trabalhos sem a palavra-chave no tipo de contrato", async ()
 })
 
 it("Deve ignorar os trabalhos sem a palavra-chave no periodo", async () => {
-    const res1 = await axios.post("http://api:3000/work", input[0]);
-    const res2 = await axios.post("http://api:3000/work", input[1]);
-    const res3 = await axios.post("http://api:3000/work", input[2]);
+    const res1 = await axios.post("http://app-node:3000/work", input[0]);
+    const res2 = await axios.post("http://app-node:3000/work", input[1]);
+    const res3 = await axios.post("http://app-node:3000/work", input[2]);
 
     expect(res1.status).toBe(201)
     expect(res2.status).toBe(201)
@@ -215,8 +213,8 @@ it("Deve ignorar os trabalhos sem a palavra-chave no periodo", async () => {
         }
     }
 
-    const response = await axios.get("http://api:3000/work", { params });
-
+    const response = await axios.get("http://app-node:3000/work", { params });
+  
     expect(response.status).toBe(200);
 
     const output = response.data.works;
@@ -235,11 +233,11 @@ it("Deve paginar corretamente os resultados", async () => {
     }))
 
     for (const work of works) {
-        const response = await axios.post("http://api:3000/work", work);
+        const response = await axios.post("http://app-node:3000/work", work);
         expect(response.status).toBe(201);
     }
 
-    const resPage1 = await axios.get("http://api:3000/work", {
+    const resPage1 = await axios.get("http://app-node:3000/work", {
         params: {
             filters: { keywords: 'temp' },
             limit: 5,
@@ -247,7 +245,7 @@ it("Deve paginar corretamente os resultados", async () => {
         },
     })
 
-    const resPage2 = await axios.get("http://api:3000/work", {
+    const resPage2 = await axios.get("http://app-node:3000/work", {
         params: {
             filters: { keywords: 'temp' },
             limit: 5,

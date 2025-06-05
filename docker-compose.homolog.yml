@@ -1,0 +1,31 @@
+services:
+  api-hml:
+    build:
+      context: .
+      dockerfile: Dockerfile.build
+    container_name: api-homolog
+    env_file: .env.hml
+    command: npm run start
+    restart: unless-stopped
+    depends_on:
+      - db-hml
+    networks:
+      - homolog-network
+
+  db-hml:
+    image: postgres
+    container_name: db-homolog
+    env_file: .env.db.hml
+    restart: unless-stopped
+    volumes:
+      - pgdata_homolog:/var/lib/postgresql/data
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+    networks:
+      - homolog-network
+
+volumes:
+  pgdata_homolog:
+
+networks:
+  homolog-network:
+    driver: bridge

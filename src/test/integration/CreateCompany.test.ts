@@ -22,7 +22,7 @@ it("Deve salvar uma empresa com sucesso", async () => {
         endereco: 'Rua Altamiro Guimaraes, Revoredo',
     }
 
-    const response = await axios.post("http://api:3000/company", input)
+    const response = await axios.post("http://app-node:3000/company", input)
 
     expect(response.status).toBe(201)
     const output = response.data;
@@ -42,7 +42,7 @@ it("deve lançar um erro ao salvar uma empresa com nome vazio", async () => {
         endereco: 'Rua Altamiro Guimaraes, Revoredo',
     }
 
-    const response = await axios.post("http://api:3000/company", input)
+    const response = await axios.post("http://app-node:3000/company", input)
 
     expect(response.status).toBe(422)
     const output = response.data
@@ -61,7 +61,7 @@ it("deve lançar um erro ao salvar uma empresa com cnpj inválido", async () => 
         endereco: 'Rua Altamiro Guimaraes, Revoredo',
     }
 
-    const response = await axios.post("http://api:3000/company", input)
+    const response = await axios.post("http://app-node:3000/company", input)
 
     expect(response.status).toBe(422)
     const output = response.data
@@ -85,7 +85,7 @@ it("deve lançar um erro ao salvar uma empresa com cnpj duplicado", async () => 
         endereco: 'Rua Altamiro Guimaraes, Revoredo',
     }]
 
-    const response1 = await axios.post("http://api:3000/company", input[0])
+    const response1 = await axios.post("http://app-node:3000/company", input[0])
 
     expect(response1.status).toBe(201)
     const output1 = response1.data;
@@ -94,7 +94,7 @@ it("deve lançar um erro ao salvar uma empresa com cnpj duplicado", async () => 
     expect(typeof output1.id).toBe('string');
     expect(output1.id).toMatch(/[a-z0-9\-]{36}/);
 
-    const response2 = await axios.post("http://api:3000/company", input[1])
+    const response2 = await axios.post("http://app-node:3000/company", input[1])
 
     expect(response2.status).toBe(422)
     const output = response2.data
@@ -113,7 +113,8 @@ it("deve lançar um erro ao salvar uma empresa com email inválido", async () =>
         endereco: 'Rua Altamiro Guimaraes, Revoredo',
     }
 
-    const response = await axios.post("http://api:3000/company", input)
+    const response = await axios.post("http://app-node:3000/company", input)
+
 
     expect(response.status).toBe(422)
     const output = response.data
@@ -137,7 +138,7 @@ it("deve lançar um erro ao salvar uma empresa com email duplicado", async () =>
         endereco: 'Rua Altamiro Guimaraes, Revoredo',
     }]
 
-    const response1 = await axios.post("http://api:3000/company", input[0])
+    const response1 = await axios.post("http://app-node:3000/company", input[0])
     const output1 = response1.data
     expect(response1.status).toBe(201)
 
@@ -145,7 +146,7 @@ it("deve lançar um erro ao salvar uma empresa com email duplicado", async () =>
     expect(typeof output1.id).toBe('string');
     expect(output1.id).toMatch(/[a-z0-9\-]{36}/);
 
-    const response2 = await axios.post("http://api:3000/company", input[1])
+    const response2 = await axios.post("http://app-node:3000/company", input[1])
     const output2 = response2.data
     expect(response2.status).toBe(422)
 
@@ -163,7 +164,7 @@ it("deve lançar um erro ao salvar uma empresa com email vazio", async () => {
         endereco: 'Rua Altamiro Guimaraes, Revoredo',
     }
 
-    const response = await axios.post("http://api:3000/company", input)
+    const response = await axios.post("http://app-node:3000/company", input)
 
     expect(response.status).toBe(422)
     const output = response.data
@@ -183,7 +184,8 @@ it("deve lançar um erro ao salvar uma empresa endereco vazio", async () => {
         endereco: '',
     }
 
-    const response = await axios.post("http://api:3000/company", input)
+    const response = await axios.post("http://app-node:3000/company", input)
+
     const output = response.data
     expect(response.status).toBe(422)
 

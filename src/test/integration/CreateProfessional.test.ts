@@ -1,5 +1,4 @@
 import axios from "axios";
-// import { PgPromiseAdapter } from "../../infra/database/DatabaseConnection";
 import pgPromiseConnection from "../../infra/database/pgPromiseConnection";
 
 axios.defaults.validateStatus = function () {
@@ -7,10 +6,6 @@ axios.defaults.validateStatus = function () {
   }
 
 let db: any
-
-beforeAll(async () => {
-//   db = new PgPromiseAdapter()
-});
 
 beforeEach(async () => {
     await pgPromiseConnection.query("DELETE FROM professional", []);
@@ -29,8 +24,8 @@ it("Deve salvar um profissional com sucesso", async () => {
         salary: 40000.0
     }
 
-    const response = await axios.post("http://api:3000/professional", input)
-
+    const response = await axios.post("http://app-node:3000/professional", input)
+    
     expect(response.status).toBe(201)
     const output = response.data;
 
@@ -49,7 +44,7 @@ it("deve lançar um erro ao salvar um profissional com nome vazio", async () => 
         salary: 9000.0,
     }
 
-    const response = await axios.post("http://api:3000/professional", input)
+    const response = await axios.post("http://app-node:3000/professional", input)
 
     expect(response.status).toBe(422)
     const output = response.data
@@ -68,7 +63,7 @@ it("deve lançar um erro ao salvar um profissional com nome inválido", async ()
         salary: 9000.0,
     }
 
-    const response = await axios.post("http://api:3000/professional", input)
+    const response = await axios.post("http://app-node:3000/professional", input)
 
     expect(response.status).toBe(422)
     const output = response.data
@@ -87,7 +82,7 @@ it("deve lançar um erro ao salvar um profissional com email vazio", async () =>
         salary: 9000.0,
     }
 
-    const response = await axios.post("http://api:3000/professional", input)
+    const response = await axios.post("http://app-node:3000/professional", input)
 
     expect(response.status).toBe(422)
     const output = response.data
@@ -106,7 +101,7 @@ it("deve lançar um erro ao salvar um profissional com email inválido", async (
         salary: 9000.0,
     }
 
-    const response = await axios.post("http://api:3000/professional", input)
+    const response = await axios.post("http://app-node:3000/professional", input)
 
     expect(response.status).toBe(422)
     const output = response.data
@@ -125,7 +120,8 @@ it("deve lançar um erro ao salvar um profissional com email duplicado", async (
         salary: 9000.0,
     }
 
-    const response1 = await axios.post("http://api:3000/professional", input)
+    const response1 = await axios.post("http://app-node:3000/professional", input)
+
     const output1 = response1.data
     expect(response1.status).toBe(201)
 
@@ -133,7 +129,8 @@ it("deve lançar um erro ao salvar um profissional com email duplicado", async (
     expect(typeof output1.id).toBe('string');
     expect(output1.id).toMatch(/[a-z0-9\-]{36}/);
 
-    const response2 = await axios.post("http://api:3000/professional", input)
+    const response2 = await axios.post("http://app-node:3000/professional", input)
+
     const output2 = response2.data
     expect(response2.status).toBe(422)
 
@@ -151,7 +148,8 @@ it("deve lançar um erro ao salvar um profissional com ocupação vazia", async 
         salary: 90000,
     }
 
-    const response = await axios.post("http://api:3000/professional", input)
+    const response = await axios.post("http://app-node:3000/professional", input)
+
     const output = response.data
     expect(response.status).toBe(422)
 
@@ -169,7 +167,8 @@ it("deve lançar um erro ao salvar um profissional com salario vazio", async () 
         salary: 0,
     }
 
-    const response = await axios.post("http://api:3000/professional", input)
+    const response = await axios.post("http://app-node:3000/professional", input)
+
     const output = response.data
     expect(response.status).toBe(422)
 
