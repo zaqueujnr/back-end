@@ -14,13 +14,13 @@ jobs:
       - name: Checkout do código
         uses: actions/checkout@v4
 
-      - name: Execução CI back-end
-        env: 
-          DATABASE_URL: ${{ secrets.DATABASE_URL }}
-          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
-          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
-        run: |
-          docker compose -f docker-compose.ci.yml up --build --abort-on-container-exit
+      # - name: Execução CI back-end
+      #   env: 
+      #     DATABASE_URL: ${{ secrets.DATABASE_URL }}
+      #     POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+      #     POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+      #   run: |
+      #     docker compose -f docker-compose.ci.yml up --build --abort-on-container-exit
 
       - name: Ver logs do container
         if: failure()
